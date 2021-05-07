@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
 
 import br.com.ot4.proposta.compartilhado.CpfOuCnpj;
 import br.com.ot4.proposta.compartilhado.UniqueValue;
-import br.com.ot4.proposta.repository.PropostaRepository;
 
 public class PropostaRequest {
 	

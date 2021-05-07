@@ -3,6 +3,8 @@ package br.com.ot4.proposta.proposta;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +28,8 @@ public class Proposta {
 	private String endereco;
 	@NotNull
 	private BigDecimal salario;
+	@Enumerated(EnumType.STRING)
+    private StatusAnalisaProposta statusRestricao = StatusAnalisaProposta.SOLICITADO;
 	
 	public Proposta () {}
 
@@ -48,6 +52,14 @@ public class Proposta {
 		this.nome = nome;
 		this.endereco = endereco;
 		this.salario = salario;
+	}
+	
+	public StatusAnalisaProposta getStatusRestricao() {
+		return statusRestricao;
+	}
+
+	public void setStatusRestricao(StatusAnalisaProposta statusRestricao) {
+		this.statusRestricao = statusRestricao;
 	}
 
 	public Long getId() {
