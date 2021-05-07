@@ -17,7 +17,6 @@ import br.com.ot4.proposta.repository.PropostaRepository;
 public class PropostaRequest {
 	
 	@NotBlank @CpfOuCnpj
-	@UniqueValue(domainClass = Proposta.class, fieldName = "documento")
 	private String documento;
 	
 	@NotBlank @Email @Size(max = 128)
