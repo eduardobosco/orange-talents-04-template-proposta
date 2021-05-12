@@ -1,6 +1,7 @@
 package br.com.ot4.proposta.proposta;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -31,8 +32,24 @@ public class PropostaResponse {
 	@NotNull @Positive
 	private BigDecimal salario;
 	
+	private String status;
+	
 	public PropostaResponse() {}
+	
+	
 
+	public PropostaResponse(Long idProposta, @NotBlank String documento, @NotBlank @Email @Size(max = 128) String email,
+			@NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario, String status) {
+		super();
+		this.idProposta = idProposta;
+		this.documento = documento;
+		this.email = email;
+		this.nome = nome;
+		this.endereco = endereco;
+		this.salario = salario;
+		this.status = status;
+	}
+	
 	public PropostaResponse(Proposta proposta) {
 		this.idProposta = proposta.getId();
 		this.documento = proposta.getDocumento();
@@ -40,7 +57,20 @@ public class PropostaResponse {
 		this.nome = proposta.getNome();
 		this.salario = proposta.getSalario();
 		this.endereco=proposta.getEndereco();
+		this.status=proposta.getStatusRestricao().toString();
 	}
+	
+
+	public PropostaResponse(Optional<Proposta> proposta) {
+		this.idProposta = proposta.get().getId();
+		this.documento = proposta.get().getDocumento();
+		this.nome = proposta.get().getNome();
+		this.email = proposta.get().getEmail();
+		this.endereco = proposta.get().getEndereco();
+		this.salario = proposta.get().getSalario();
+		this.status = proposta.get().getStatusRestricao().toString();
+	}
+
 	
 
 	public Long getIdProposta() {
@@ -67,4 +97,9 @@ public class PropostaResponse {
 		return salario;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	
 }

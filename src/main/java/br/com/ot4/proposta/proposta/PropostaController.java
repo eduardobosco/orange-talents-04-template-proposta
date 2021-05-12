@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,19 @@ public class PropostaController {
 	private AnalisePropostaFeign analisePropostaFeign;
 	
 	private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<PropostaResponse> consultaProposta(@PathVariable("id") Long id){
+		Optional<Proposta> proposta = propostaRepository.findById(id);
+		
+		if(proposta.isPresent()){
+			return ResponseEntity.ok(new PropostaResponse(proposta));
+		}else{
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+	} 
+
 
 	@PostMapping
 	@Transactional
