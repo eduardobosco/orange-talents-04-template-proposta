@@ -41,38 +41,40 @@ public class PropostaController {
 	public ResponseEntity<?> cadastrar(@RequestBody @Valid PropostaRequest form,
 			UriComponentsBuilder uriBuilder) {
 
-		logger.info("Requisição de Proposta do cliente={} com salario={} e email={} recebida.", form.getDocumento(), form.getSalario().toString(), form.getEmail());
+		logger.info("Requisição de Proposta do cliente {} com salario {} e email {} recebida.", form.getDocumento(), form.getSalario().toString(), form.getEmail());
 		
 		Optional<Proposta> optional = propostaRepository.findByDocumento(form.getDocumento());
 
 		if (optional.isPresent()) {
-			logger.warn("Proposta com documento já existente recebida. Documento={}", form.getDocumento());
+			logger.warn("Proposta com documento já existente recebida. Documento {}", form.getDocumento());
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Já existe uma proposta para esse solicitante.");
 
 		}
 		Proposta proposta = form.converter(propostaRepository);
-		analisaRestricao(proposta);
+		
 		propostaRepository.save(proposta);
 		
-		logger.info("Proposta criada={}", proposta, proposta.getStatusRestricao());
+		analisaRestricao(proposta);
+		
+		logger.info("Proposta criada {}", proposta, proposta.getStatusRestricao());
 		
 		URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
-		return ResponseEntity.created(uri).body(new PropostaRequest());
+		return ResponseEntity.created(uri).body(new PropostaResponse(proposta));
 	}
 
 	public void analisaRestricao(Proposta proposta){
-        logger.info("Enviando analise da proposta de id={}", proposta.getId());
+        logger.info("Enviando analise da proposta de id {}", proposta.getId());
         StatusAnalisaProposta status;
         try{
             AnalisePropostaResponse response = analisePropostaFeign.analisaProposta(new AnalisePropostaRequest(proposta));
-            logger.info("Resposta positiva para a proposta={}", response.getIdProposta());
+            logger.info("Resposta positiva para a proposta {}", response.getIdProposta());
             
             Assert.isTrue(response.getResultadoSolicitacao().equals(RetornoAnalise.SEM_RESTRICAO), "O resultado deveria ser SEM_RESTRICAO");
             
             status = StatusAnalisaProposta.ELEGIVEL;
         } catch (FeignException.UnprocessableEntity e){
         	
-            logger.warn("Resposta negativa. Feign={}",  e.getMessage());
+            logger.warn("Resposta negativa. Feign {}",  e.getMessage());
             
             status = StatusAnalisaProposta.NAO_ELEGIVEL;
         }
