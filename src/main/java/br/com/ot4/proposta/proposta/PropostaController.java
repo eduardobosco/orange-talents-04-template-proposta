@@ -71,7 +71,7 @@ public class PropostaController {
 		
 		analisaRestricao(proposta);
 		
-		logger.info("Proposta criada {}", proposta, proposta.getStatusRestricao());
+		logger.info("Proposta criada {} para o cliente {}", proposta.getId(), form.getDocumento());
 		
 		URI uri = uriBuilder.path("/propostas/{id}").buildAndExpand(proposta.getId()).toUri();
 		return ResponseEntity.created(uri).body(new PropostaResponse(proposta));
@@ -82,7 +82,7 @@ public class PropostaController {
         StatusAnalisaProposta status;
         try{
             AnalisePropostaResponse response = analisePropostaFeign.analisaProposta(new AnalisePropostaRequest(proposta));
-            logger.info("Resposta positiva para a proposta {}", response.getIdProposta());
+            logger.info("Resposta positiva para a proposta {}", proposta.getId());
             
             Assert.isTrue(response.getResultadoSolicitacao().equals(RetornoAnalise.SEM_RESTRICAO), "O resultado deveria ser SEM_RESTRICAO");
             

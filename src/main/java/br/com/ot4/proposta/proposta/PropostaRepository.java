@@ -14,7 +14,7 @@ public interface PropostaRepository extends JpaRepository<Proposta, Long> {
 	
 	boolean existsByDocumento(String documento);
 
-	@Query(value = "SELECT * FROM proposta WHERE proposta.cartao_id IS NULL AND proposta.status_restricao = 'ELEGIVEL' LIMIT 100 FOR UPDATE SKIP LOCKED", nativeQuery = true)
+	@Query(value = "SELECT * FROM proposta WHERE proposta.cartao_id IS NULL AND proposta.status_restricao = 'ELEGIVEL'", nativeQuery = true)
     List<Proposta> findAllWhereCartaoIdIsNull();
 	
 	List<Proposta> findByStatusRestricaoAndCartao(StatusAnalisaProposta statusRestricao, Cartao cartao);
