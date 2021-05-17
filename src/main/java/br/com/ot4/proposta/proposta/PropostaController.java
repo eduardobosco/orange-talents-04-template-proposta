@@ -27,7 +27,7 @@ import br.com.ot4.proposta.proposta.Analise.RetornoAnalise;
 import feign.FeignException;
 
 @RestController
-@RequestMapping("/api/propostas")
+@RequestMapping("/propostas")
 public class PropostaController {
 
 	@Autowired

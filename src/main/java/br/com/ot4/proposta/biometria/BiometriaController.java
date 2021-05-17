@@ -35,19 +35,23 @@ public class BiometriaController {
         webDataBinder.addValidators(new BiometriaFingerPrintValidador());
     }
 
-    @PostMapping("cartao/{idCartao}/biometria")
+    @PostMapping("cartao/{idCartao}/biometrias")
     public ResponseEntity<?> criar(@PathVariable("idCartao") Long idCartao, @RequestBody @Valid NovaBiometriaRequest novaBiometriaRequest, UriComponentsBuilder uriBuilder) {
         Optional<Cartao> possivelCartao = cartaoRepository.findById(idCartao);
+        
         if (possivelCartao.isEmpty()) {
         	logger.info("Esta faltando o numero do Cartao");
             return ResponseEntity.notFound().build();
         }
+        
         logger.info("Iniciando o cadastro de uma nova Biometria" );
         
         Biometria biometria = novaBiometriaRequest.toModel(possivelCartao.get());
         biometriaRepository.save(biometria);
-        URI location = uriBuilder.path("cartao/{idCartao}/biometria/{id}").buildAndExpand(idCartao, biometria.getId()).toUri();
+        URI location = uriBuilder.path("cartao/{idCartao}/biometrias/{id}").buildAndExpand(idCartao, biometria.getId()).toUri();
+        
         logger.info("Nova Biometria Criada" );
+        
         return ResponseEntity.created(location).body(new BiometriaResponse(biometria));
     }
 }

@@ -1,4 +1,4 @@
-package br.com.ot4.proposta.Scheduler;
+package br.com.ot4.proposta.scheduler;
 
 import java.util.List;
 
