@@ -2,14 +2,17 @@ package br.com.ot4.proposta.cartao;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import br.com.ot4.proposta.biometria.Biometria;
+import br.com.ot4.proposta.bloqueio.Bloqueio;
 import br.com.ot4.proposta.proposta.Proposta;
 
 @Entity
@@ -26,6 +29,10 @@ public class Cartao {
 
 	@OneToMany(mappedBy = "cartao")
 	private List<Biometria> biometrias;
+	
+	@OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "bloqueio_id", referencedColumnName = "id")
+    private Bloqueio bloqueio;
 
 	@Deprecated
 	public Cartao() {
