@@ -2,17 +2,17 @@ package br.com.ot4.proposta.cartao;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import br.com.ot4.proposta.biometria.Biometria;
-import br.com.ot4.proposta.bloqueio.Bloqueio;
+import br.com.ot4.proposta.bloqueio.BloqueioCartao;
 import br.com.ot4.proposta.proposta.Proposta;
 
 @Entity
@@ -30,13 +30,19 @@ public class Cartao {
 	@OneToMany(mappedBy = "cartao")
 	private List<Biometria> biometrias;
 	
-	@OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "bloqueio_id", referencedColumnName = "id")
-    private Bloqueio bloqueio;
+	@Enumerated(EnumType.STRING)
+    private StatusCartao status = StatusCartao.DESBLOQUEADO;
+	
+	@OneToMany(mappedBy = "cartao")
+    private List<BloqueioCartao> bloqueios;
 
 	@Deprecated
 	public Cartao() {
 	}
+	
+	public void bloquear() {
+        status = StatusCartao.BLOQUEADO;
+    }
 
 	public Cartao(Proposta proposta) {
 		this.proposta = proposta;
