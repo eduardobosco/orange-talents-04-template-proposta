@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.ot4.proposta.bloqueio.BloqueioRequest;
 import br.com.ot4.proposta.bloqueio.BloqueioResponse;
+import br.com.ot4.proposta.viagem.ViagemRequest;
 
 @FeignClient(url = "${client.contas.url}", name = "${client.contas.name}")
 public interface CartaoClient {
@@ -28,5 +29,5 @@ public interface CartaoClient {
 
 	@PostMapping("/api/cartoes/{id}/bloqueios")
     BloqueioResponse bloqueio(@PathVariable String id, @RequestBody BloqueioRequest request);
-
+	
 }

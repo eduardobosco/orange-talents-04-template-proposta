@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import br.com.ot4.proposta.biometria.Biometria;
 import br.com.ot4.proposta.bloqueio.BloqueioCartao;
 import br.com.ot4.proposta.proposta.Proposta;
+import br.com.ot4.proposta.viagem.Viagem;
 
 @Entity
 public class Cartao {
@@ -35,6 +36,9 @@ public class Cartao {
 	
 	@OneToMany(mappedBy = "cartao")
     private List<BloqueioCartao> bloqueios;
+	
+	@OneToMany(mappedBy = "cartao")
+    private List<Viagem> avisosDeViagem;
 
 	@Deprecated
 	public Cartao() {
