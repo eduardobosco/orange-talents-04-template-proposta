@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import br.com.ot4.proposta.aviso.AvisoClientRequest;
+import br.com.ot4.proposta.aviso.AvisoClientResponse;
 import br.com.ot4.proposta.bloqueio.BloqueioRequest;
 import br.com.ot4.proposta.bloqueio.BloqueioResponse;
-import br.com.ot4.proposta.viagem.ViagemRequest;
 
 @FeignClient(url = "${client.contas.url}", name = "${client.contas.name}")
 public interface CartaoClient {
@@ -29,5 +30,8 @@ public interface CartaoClient {
 
 	@PostMapping("/api/cartoes/{id}/bloqueios")
     BloqueioResponse bloqueio(@PathVariable String id, @RequestBody BloqueioRequest request);
+	
+	@PostMapping("/api/cartoes/{id}/avisos")
+    AvisoClientResponse avisa(@PathVariable String id, @RequestBody AvisoClientRequest request);
 	
 }

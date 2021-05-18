@@ -1,7 +1,10 @@
 package br.com.ot4.proposta.cartao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,10 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import br.com.ot4.proposta.aviso.Aviso;
+import br.com.ot4.proposta.aviso.AvisoRequest;
 import br.com.ot4.proposta.biometria.Biometria;
 import br.com.ot4.proposta.bloqueio.BloqueioCartao;
+import br.com.ot4.proposta.compartilhado.RequestHeadersUtil;
 import br.com.ot4.proposta.proposta.Proposta;
-import br.com.ot4.proposta.viagem.Viagem;
 
 @Entity
 public class Cartao {
@@ -37,8 +42,8 @@ public class Cartao {
 	@OneToMany(mappedBy = "cartao")
     private List<BloqueioCartao> bloqueios;
 	
-	@OneToMany(mappedBy = "cartao")
-    private List<Viagem> avisosDeViagem;
+	@OneToMany(mappedBy = "cartao", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Aviso> avisos = new ArrayList<>();
 
 	@Deprecated
 	public Cartao() {
@@ -46,6 +51,11 @@ public class Cartao {
 	
 	public void bloquear() {
         status = StatusCartao.BLOQUEADO;
+    }
+	
+	public void associarAviso(AvisoRequest request, Map<String, String> requestHeaders) {
+        avisos.add(new Aviso(this, request.getDestino(), request.getValidoAte(),
+                requestHeaders.get(RequestHeadersUtil.IP), requestHeaders.get(RequestHeadersUtil.USER_AGENT)));
     }
 
 	public Cartao(Proposta proposta) {
