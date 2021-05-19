@@ -12,6 +12,8 @@ import br.com.ot4.proposta.aviso.AvisoClientRequest;
 import br.com.ot4.proposta.aviso.AvisoClientResponse;
 import br.com.ot4.proposta.bloqueio.BloqueioRequest;
 import br.com.ot4.proposta.bloqueio.BloqueioResponse;
+import br.com.ot4.proposta.carteira.CarteiraClientRequest;
+import br.com.ot4.proposta.carteira.CarteiraClientResponse;
 
 @FeignClient(url = "${client.contas.url}", name = "${client.contas.name}")
 public interface CartaoClient {
@@ -33,5 +35,8 @@ public interface CartaoClient {
 	
 	@PostMapping("/api/cartoes/{id}/avisos")
     AvisoClientResponse avisa(@PathVariable String id, @RequestBody AvisoClientRequest request);
+
+	@PostMapping("/api/cartoes/{id}/carteiras")
+    CarteiraClientResponse adiciona(@PathVariable String id, @RequestBody CarteiraClientRequest request);
 	
 }
