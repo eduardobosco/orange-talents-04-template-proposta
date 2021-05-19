@@ -25,6 +25,8 @@ import br.com.ot4.proposta.proposta.Analise.AnalisePropostaRequest;
 import br.com.ot4.proposta.proposta.Analise.AnalisePropostaResponse;
 import br.com.ot4.proposta.proposta.Analise.RetornoAnalise;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 
 @RestController
 @RequestMapping("/propostas")
@@ -37,6 +39,12 @@ public class PropostaController {
 	private AnalisePropostaFeign analisePropostaFeign;
 	
 	private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+	
+	private final Tracer tracer;
+
+    public PropostaController(Tracer tracer) {
+        this.tracer = tracer;
+    }
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<PropostaResponse> consultaProposta(@PathVariable("id") Long id){
@@ -57,6 +65,13 @@ public class PropostaController {
 			UriComponentsBuilder uriBuilder) {
 
 		logger.info("Requisição de Proposta do cliente {} com salario {} e email {} recebida.", form.getDocumento(), form.getSalario().toString(), form.getEmail());
+		
+		Span activeSpan = tracer.activeSpan();
+        activeSpan.setTag("user.email", form.getEmail());
+
+        activeSpan.setBaggageItem("user.email", form.getEmail());
+
+        activeSpan.log("Meu log personalizado - Eduardo");
 		
 		Optional<Proposta> optional = propostaRepository.findByDocumento(form.getDocumento());
 

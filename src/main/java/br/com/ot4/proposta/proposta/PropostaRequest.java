@@ -62,6 +62,8 @@ public class PropostaRequest {
 	public BigDecimal getSalario() {
 		return salario;
 	}
+	
+	
 
 	public Proposta converter(PropostaRepository propostaRepository) {
 		return new Proposta(documento, email, nome, endereco, salario);
