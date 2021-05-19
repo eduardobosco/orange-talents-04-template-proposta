@@ -3,6 +3,7 @@ package br.com.ot4.proposta.proposta;
 import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,8 +25,11 @@ public class Proposta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@NotBlank
+	@Convert(converter = AttributeEncryptor.class)
 	private String documento;
+	
 	@NotBlank @Email
 	private String email;
 	@NotBlank
